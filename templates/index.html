@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Прогнозы</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="prognosis">
+        <div class="prognosis__container">
+            <p class="prognosis__info">
+                Прогнозное значение параметра<br>
+                “Соотношение матрица исполнитель”<br>
+                Введите данные параметров и нажмите “Прогноз”:
+            </p>
+            action="http://127.0.0.1:5000/"
+            <form  class="prognosis__form" method="POST" action=""  onsubmit="sendForm(event, this)">
+                <div class="prognosis__inputs">
+                    <div class="prognosis__wrapper">
+                        <div class="prognosis__group">
+                            <label for="param1" class="prognosis__label">Плотность, кг/м3</label>
+                            <input name="param1" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+
+                        <div class="prognosis__group">
+                            <label for="param2" class="prognosis__label">Модуль упругости, ГПА</label>
+                            <input name="param2" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+
+                        <div class="prognosis__group">
+                            <label for="param3" class="prognosis__label">Количество отвердителя,м. %</label>
+                            <input name="param3" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param4" class="prognosis__label">Содержание эпоксидных групп,%_2
+                            </label>
+                            <input name="param4" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+                    </div>
+
+
+                    <div class="prognosis__wrapper">
+                        <div class="prognosis__group">
+                            <label for="param5" class="prognosis__label">Температура вспышки,С_2
+                            </label>
+                            <input name="param5" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param6" class="prognosis__label">Поверхностная плотность, г/м2
+                            </label>
+                            <input name="param6" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param7" class="prognosis__label">Модуль упругости при растяжении, ГПА
+                            </label>
+                            <input name="param7" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param8" class="prognosis__label">Прочность при растяжении, МПА
+                            </label>
+                            <input name="param8" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+                    </div>
+
+                    <div class="prognosis__wrapper">
+                        <div class="prognosis__group">
+                            <label for="param9" class="prognosis__label">Потребление
+                                смолы, г/м2
+                            </label>
+                            <input name="param9" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param10" class="prognosis__label">Угол нашивки,
+                                град
+                            </label>
+                            <input name="param10" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param11" class="prognosis__label">Шаг
+                                нашивки
+                            </label>
+                            <input name="param11" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+
+                        <div class="prognosis__group">
+                            <label for="param12" class="prognosis__label">Плотность
+                                нашивки
+                            </label>
+                            <input name="param12" type="text" class="prognosis__input" placeholder="Заполните значение">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="prognosis__bottom">
+                    <div class="prognosis__text">
+                        <p class="prognosis__by">Приложение разработал</p>
+                        <p class="prognosis__author">
+                            Кузнецов Алексей - слушатель курса “Data Science” Образовательного центра Московского
+                            государственного технического университета им.Н. Э. Баумана.
+                        </p>
+                    </div>
+
+                    <div class="prognosis__result">
+                        <button name ="Send" type="submit" class="prognosis__submit">
+                            Прогноз
+                        </button> 
+                        <div class="prognosis__group prognosis__group--result">
+                            <label for="result" class="prognosis__label">Результат</label>
+                            <input id="result" type="text" class="prognosis__input prognosis__res" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+const sendForm = (e, form) => {
+  e.preventDefault()
+
+  // Проверка наличия значений полей формы
+  let hasValues = false
+  let counter = 0
+
+  for (let i = 0; i < form.elements.length; i++) {
+    if (form.elements[i].value && !isNaN(form.elements[i].value)) {
+      hasValues = true
+      counter++
+    }
+  }
+
+  if (hasValues && counter === 12) {
+    fetch('/', {
+      body: new FormData(form),
+      method: 'post',
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+    .then(response => response.text())
+    .then(text => {
+  const regex = /\d+/g;
+  const match = text.match(regex);
+  if (match) {
+    const result = match[0]; // Берем первое число из текста ответа
+    document.getElementById('result').value = result;
+  } else {
+    document.getElementById('result').value = "";
+  }
+})
+
+  return false
+}
+
+const form = document.querySelector('form')
+const formElements = form.elements
+
+const handleFormChange = () => {
+  sendForm(event, form)
+}
+
+for (let i = 0; i < formElements.length; i++) {
+  formElements[i].addEventListener('change', handleFormChange)
+  formElements[i].addEventListener('input', handleFormChange)
+}
+
+    </script>
+</body>
+<style  type="text/css">
+body {
+    margin: 0;
+    color: #FFCFCB;
+    font-family: 'Inter', sans-serif;
+}
+
+p {
+    margin: 0;
+}
+
+input:active, input:focus{
+    outline: none;
+    border: 1px solid #790111 !important;
+    color: #790111;
+}
+
+.prognosis {
+    background: linear-gradient(to right, #0E0003 0%, 30.736544728279114%, #790111 61.47308945655823%, 80.73654472827911%, #5B000E 100%);
+}
+
+.prognosis__container {
+    padding: 64px 16px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.prognosis__info {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 39px;
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.prognosis__inputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 64px;
+}
+
+.prognosis__inputs::after {
+    content: '';
+    flex: auto;
+}
+
+.prognosis__group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 64px;
+    justify-content: flex-end;
+}
+
+.prognosis__wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.prognosis__label {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 16px;
+    max-width: 178px;
+    text-align: center;
+}
+
+.prognosis__input {
+    background: #FEFFFF;
+    border-radius: 41px;
+    padding: 10px 24px;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #0F0104;
+    border: 1px solid transparent;
+}
+
+.prognosis__input::placeholder {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #0F0104;
+}
+
+.prognosis__bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.prognosis__text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.prognosis__by {
+    margin-bottom: 16px;
+}
+
+.prognosis__author {
+    max-width: 640px;
+    display: block;
+}
+
+.prognosis__result {
+    display: flex;
+    align-items: flex-end;
+}
+
+.prognosis__group--result {
+    width: initial;
+    justify-content: initial;
+    margin-bottom: 0;
+}
+
+.prognosis__submit {
+    background: #FEFFFF;
+    border-radius: 41px;
+    padding: 10px 24px;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #0F0104;
+    border: 1px solid transparent;
+    height: fit-content;
+    margin-right: 32px;
+
+    cursor: pointer;
+}
+
+.prognosis__submit:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 1050px) {
+    .prognosis__inputs {
+        flex-direction: row;
+        flex-wrap: initial;
+    }
+
+    .prognosis__wrapper {
+        flex-direction: column;
+    }
+
+    .prognosis__bottom {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+    }
+
+    .prognosis__text {
+        width: 100%;
+    }
+
+    .prognosis__result {
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 755px) {
+    .prognosis__inputs {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .prognosis__info {
+        font-size: 20px;
+     margin-bottom: 40px;
+    }
+    .prognosis__input {
+        width: 100%;
+    }
+
+    .prognosis__group {
+        padding: 0 24px;
+        margin-bottom: 16px;
+    }
+
+    .prognosis__res, .prognosis__group--result {
+        margin: 0;
+    }
+
+    .prognosis__label {
+        max-width: none;
+    }
+}
+</style>
+</html>
